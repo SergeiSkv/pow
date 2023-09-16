@@ -1,0 +1,26 @@
+version: '3'
+services:
+  pow-server:
+    build:
+      dockerfile: Dockerfile.server
+    environment:
+      - SERVER_PORT=${SERVER_PORT}
+      - SERVER_TARGETPREFIX=${TARGET_PREFIX}
+    ports:
+      - "8080:8080"
+    networks:
+      - pow
+
+  pow-client:
+    build:
+      dockerfile: Dockerfile.client
+    environment:
+      - CLIENT_SERVERPORT=${SERVER_PORT}
+      - CLIENT_TARGETPREFIX=${TARGET_PREFIX}
+    depends_on:
+      - pow-server
+    networks:
+      - pow
+networks:
+  pow:
+    driver: bridge
